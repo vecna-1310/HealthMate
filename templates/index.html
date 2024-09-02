@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Recommendation</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #000; /* Black background */
+            color: #fff; /* White text */
+            font-family: Arial, sans-serif;
+        }
+        .recipe-card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            height: 350px; /* Fixed height for cards */
+            background-color: #1c1c1c; /* Darker card background */
+        }
+        .recipe-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+            transform: translateY(-5px);
+        }
+        .recipe-image {
+            max-height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            height: 200px; /* Fixed height for image */
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .form-container {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            background-color: #1c1c1c; /* Darker form background */
+        }
+        .form-control {
+            border-radius: 5px;
+            background-color: #333; /* Darker form input background */
+            color: #fff; /* White text in form controls */
+            border: 1px solid #555; /* Border color for form controls */
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+        .form-control:focus {
+            border-color: #00bfff; /* Cyan border on focus */
+            box-shadow: 0 0 8px rgba(0, 191, 255, 0.25); /* Cyan shadow on focus */
+        }
+        .btn-primary {
+            background-color: #00bfff; /* Cyan button background */
+            border-color: #00bfff;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 191, 255, 0.3); /* Cyan button shadow */
+            color: #000; /* Black text on button */
+        }
+        .btn-primary:hover {
+            box-shadow: 0 6px 8px rgba(0, 191, 255, 0.5); /* Deeper shadow on hover */
+            background-color: #1e90ff; /* Slightly darker cyan on hover */
+            border-color: #1e90ff;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .container {
+            max-width: 900px;
+        }
+        h1, h2 {
+            color: #00bfff; /* Cyan headers */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 text-center">HealthMate</h1>
+        <div class="form-container">
+            <form method="post" class="mt-4">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="calories">Calories</label>
+                        <input type="number" class="form-control" id="calories" name="calories" step="any" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="fat">Fat</label>
+                        <input type="number" class="form-control" id="fat" name="fat" step="any" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="carbohydrates">Carbohydrates</label>
+                        <input type="number" class="form-control" id="carbohydrates" name="carbohydrates" step="any" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="protein">Protein</label>
+                        <input type="number" class="form-control" id="protein" name="protein" step="any" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="cholesterol">Cholesterol</label>
+                        <input type="number" class="form-control" id="cholesterol" name="cholesterol" step="any" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="sodium">Sodium</label>
+                        <input type="number" class="form-control" id="sodium" name="sodium" step="any" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fiber">Fiber</label>
+                    <input type="number" class="form-control" id="fiber" name="fiber" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="ingredients">Ingredients</label>
+                    <input type="text" class="form-control" id="ingredients" name="ingredients" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Get Recommendations</button>
+            </form>
+        </div>
+
+        {% if recommendations %}
+        <div class="mt-5">
+            <h2>Recommended Recipes</h2>
+            <div class="row">
+                {% for recipe in recommendations %}
+                <div class="col-md-4">
+                    <div class="card recipe-card">
+                        <img class="card-img-top recipe-image" src="{{ recipe['image_url'] }}" alt="{{ recipe['recipe_name'] }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ recipe['recipe_name'] }}</h5>
+                            <p class="card-text">{{ recipe['ingredients_list'] | truncate(100) }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
